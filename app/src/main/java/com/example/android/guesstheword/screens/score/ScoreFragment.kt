@@ -24,9 +24,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.android.guesstheword.R
 import com.example.android.guesstheword.databinding.ScoreFragmentBinding
+import com.example.android.guesstheword.screens.game.GameFragmentDirections
 import timber.log.Timber
 
 /**
@@ -54,7 +57,19 @@ class ScoreFragment : Fragment() {
         viewModel.score.observe(viewLifecycleOwner, Observer { newScore->
             binding.scoreText.text = newScore.toString()
         })
+
+        viewModel.eventPlayAgain.observe(viewLifecycleOwner, Observer { eventPlayAgain->
+            if(eventPlayAgain){
+                val action = ScoreFragmentDirections.actionRestart()
+                NavHostFragment.findNavController(this).navigate(action)
+                viewModel.onPlayAgainComplete()
+            }
+        })
         //binding.scoreText.text = viewModel.score.toString()
+        binding.playAgainButton.setOnClickListener {
+            viewModel.onPlayAgain()
+        }
+
         return binding.root
     }
 

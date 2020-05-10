@@ -10,9 +10,20 @@ class ScoreViewModel(finalScore:Int):ViewModel() {
     val score: LiveData<Int>
         get() = _score
 
+    private val _eventPlayAgain = MutableLiveData<Boolean>()
+    val eventPlayAgain :LiveData<Boolean>
+        get() = _eventPlayAgain
+
     init{
         Timber.i("Final score is $finalScore")
         _score.value = finalScore
+    }
+
+    fun onPlayAgain(){
+        _eventPlayAgain.value = true
+    }
+    fun onPlayAgainComplete(){
+        _eventPlayAgain.value = false
     }
 
     override fun onCleared() {
